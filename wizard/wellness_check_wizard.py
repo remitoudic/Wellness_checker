@@ -19,13 +19,13 @@ class WellnessCheckWizard(models.Model):
         questions = self.env['wellness.question'].search([('active', '=', True)], limit=3, order='sequence, id')
         return questions
 
-    # Labels generated dynamically from the wellness.question configuration
-    q1_label = fields.Char(compute='_compute_questions')
-    q2_label = fields.Char(compute='_compute_questions')
-    q3_label = fields.Char(compute='_compute_questions')
+    # Labels populated dynamically during default_get
+    q1_label = fields.Char()
+    q2_label = fields.Char()
+    q3_label = fields.Char()
 
     mood_score = fields.Integer(
-        string='On a scale of 1 to 10, how are you feeling today?', 
+        string='On a scale of 1 to 10, how are you today?', 
         default=5,
         help="Main numerical sentiment metric (1-10)."
     )
@@ -34,13 +34,27 @@ class WellnessCheckWizard(models.Model):
     q2_answer = fields.Text(string='Answer 2')
     q3_answer = fields.Text(string='Answer 3')
 
-    @api.depends()
-    def _compute_questions(self):
-        """ Maps active question text to the wizard labels. """
+    @api.model
+    def default_get(self, fields_list):
+        res = super(WellnessCheckWizard, self).default_get(fields_list)
         questions = self._default_questions()
-        self.q1_label = questions[0].name if len(questions) > 0 else 'How are you today?'
-        self.q2_label = questions[1].name if len(questions) > 1 else 'What was the highlight of your day?'
-        self.q3_label = questions[2].name if len(questions) > 2 else 'Any suggestions for morale improvement?'
+        
+        if len(questions) > 0:
+            res['q1_label'] = questions[0].name
+        else:
+            res['q1_label'] = 'How are you today?'
+            
+        if len(questions) > 1:
+            res['q2_label'] = questions[1].name
+        else:
+            res['q2_label'] = 'What was the highlight of your day?'
+            
+        if len(questions) > 2:
+            res['q3_label'] = questions[2].name
+        else:
+            res['q3_label'] = 'Any suggestions for morale improvement?'
+            
+        return res
 
     def action_submit(self):
         """ 

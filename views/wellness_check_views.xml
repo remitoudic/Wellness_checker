@@ -43,7 +43,7 @@
         <field name="arch" type="xml">
             <list string="Wellness Responses" decoration-success="sentiment == 'happy'" decoration-warning="sentiment == 'neutral'" decoration-danger="sentiment == 'sad'">
                 <field name="date"/>
-                <field name="mood_score" widget="priority"/>
+                <field name="mood_score" string="Mood (1-10)"/>
                 <field name="sentiment" widget="badge" decoration-success="sentiment == 'happy'" decoration-warning="sentiment == 'neutral'" decoration-danger="sentiment == 'sad'"/>
                 <field name="analysis"/>
                 <field name="q1_answer" optional="show"/>
@@ -65,7 +65,7 @@
                     </div>
                     <group>
                         <group name="sentiment" string="Evaluation">
-                            <field name="mood_score" widget="priority" readonly="1"/>
+                            <field name="mood_score" string="Mood Score (1-10)" readonly="1"/>
                             <field name="sentiment" widget="badge" decoration-success="sentiment == 'happy'" decoration-warning="sentiment == 'neutral'" decoration-danger="sentiment == 'sad'"/>
                         </group>
                         <group name="analysis" string="Automatic Analysis">

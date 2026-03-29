@@ -14,7 +14,9 @@
                         <h1>How are you today?</h1>
                     </div>
                     <group>
-                        <field name="mood_score" widget="priority" string="Mood (1-10)"/>
+                        <field name="mood_score" string="Your Mood Today (1–10)"
+                               widget="integer"
+                               help="Rate your mood from 1 (very low) to 10 (excellent)"/>
                     </group>
                     <group>
                         <field name="q1_label" invisible="1"/>
