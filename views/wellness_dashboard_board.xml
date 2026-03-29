@@ -1,65 +1,116 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- Special Kanban View for the 3 KPI Boxes -->
-    <record id="view_wellness_check_kanban_stats" model="ir.ui.view">
-        <field name="name">wellness.check.kanban.stats</field>
-        <field name="model">wellness.check</field>
+    <!-- 1. Form View for the Dashboard Singleton (priority=1 = default view) -->
+    <record id="view_wellness_dashboard_form_snapshot" model="ir.ui.view">
+        <field name="name">wellness.dashboard.form.snapshot</field>
+        <field name="model">wellness.dashboard</field>
+        <field name="priority">1</field>
         <field name="arch" type="xml">
-            <kanban create="0" records_draggable="0" sample="1">
-                <field name="id"/>
-                <field name="mood_score"/>
-                <field name="sentiment"/>
-                <field name="date"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="o_kanban_record_full shadow-sm rounded-4 border p-4 text-center bg-white m-2">
-                            <div class="h5 text-muted text-uppercase fw-bold mb-2">Employee Pulse</div>
-                            <div class="display-3 fw-bold text-teal" style="color: #008080;"><field name="mood_score"/></div>
-                            <div class="badge rounded-pill mt-2" decoration-success="sentiment == 'happy'" decoration-warning="sentiment == 'neutral'" decoration-danger="sentiment == 'sad'">
-                                <field name="sentiment"/>
+            <form create="0" edit="0" delete="0">
+                <sheet>
+                    <div style="display:flex; flex-wrap:nowrap; gap:16px; width:100%; align-items:stretch; padding: 8px 0;">
+
+                        <!-- Card 1: Engagement -->
+                        <div style="flex:1; min-width:0;">
+                            <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
+                                <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:8px;">Engagement</div>
+                                <div style="font-size:2.8rem; font-weight:800; color:#008080; line-height:1;">
+                                    <field name="participation_today" readonly="1"/>
+                                </div>
+                                <div style="font-size:0.75rem; color:#9ca3af; margin-top:6px;">Check-ins Today</div>
                             </div>
                         </div>
-                    </t>
-                </templates>
-            </kanban>
+
+                        <!-- Card 2: Pulse Sign -->
+                        <div style="flex:0.7; min-width:0;">
+                            <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
+                                <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:8px;">Pulse</div>
+                                <div style="font-size:3rem; font-weight:800; line-height:1;">
+                                    <field name="sign_today" widget="badge"
+                                           decoration-success="sign_today == '+'"
+                                           decoration-danger="sign_today == '-'"
+                                           decoration-info="sign_today == '='"
+                                           readonly="1"/>
+                                </div>
+                                <div style="font-size:0.75rem; color:#9ca3af; margin-top:6px;">Direction</div>
+                            </div>
+                        </div>
+
+                        <!-- Card 3: Average Mood -->
+                        <div style="flex:1; min-width:0;">
+                            <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
+                                <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:8px;">Avg Mood</div>
+                                <div style="font-size:2.8rem; font-weight:800; color:#008080; line-height:1;">
+                                    <field name="avg_mood_today" readonly="1"/>
+                                </div>
+                                <div style="font-size:0.75rem; color:#9ca3af; margin-top:6px;">Scale 1–10</div>
+                            </div>
+                        </div>
+
+                        <!-- Card 4: Sentiment Split (using a simple stat display) -->
+                        <div style="flex:2; min-width:0;">
+                            <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
+                                <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:14px;">Sentiment Split</div>
+                                <!-- Three stat boxes side by side -->
+                                <div style="display:flex; gap:12px; text-align:center;">
+                                    <div style="flex:1; background:#f0fdf4; border-radius:10px; padding:12px 8px; border:1px solid #bbf7d0;">
+                                        <div style="font-size:1.6rem; font-weight:800; color:#16a34a; line-height:1;"><field name="happy_percent" readonly="1"/>%</div>
+                                        <div style="font-size:0.7rem; color:#9ca3af; margin-top:4px;">😊 Happy</div>
+                                    </div>
+                                    <div style="flex:1; background:#fffbeb; border-radius:10px; padding:12px 8px; border:1px solid #fde68a;">
+                                        <div style="font-size:1.6rem; font-weight:800; color:#b45309; line-height:1;"><field name="neutral_percent" readonly="1"/>%</div>
+                                        <div style="font-size:0.7rem; color:#9ca3af; margin-top:4px;">😐 Neutral</div>
+                                    </div>
+                                    <div style="flex:1; background:#fef2f2; border-radius:10px; padding:12px 8px; border:1px solid #fecaca;">
+                                        <div style="font-size:1.6rem; font-weight:800; color:#dc2626; line-height:1;"><field name="sad_percent" readonly="1"/>%</div>
+                                        <div style="font-size:0.7rem; color:#9ca3af; margin-top:4px;">😞 Sad</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </sheet>
+            </form>
         </field>
     </record>
 
-    <!-- Action for the KPI boxes -->
-    <record id="action_wellness_check_stats_kpi" model="ir.actions.act_window">
-        <field name="name">Wellness KPIs</field>
-        <field name="res_model">wellness.check</field>
-        <field name="view_mode">kanban</field>
-        <field name="view_id" ref="view_wellness_check_kanban_stats"/>
-        <field name="limit">1</field>
+    <!-- Part 1 Action: Form view on the singleton record -->
+    <record id="action_wellness_row_1_snapshot" model="ir.actions.act_window">
+        <field name="name">Pulse &amp; Sentiment Snapshot</field>
+        <field name="res_model">wellness.dashboard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_wellness_dashboard_form_snapshot"/>
+        <field name="res_id" ref="wellness_check.wellness_dashboard_singleton"/>
     </record>
 
-    <!-- The Official Dashboard (Board) Definition -->
+    <!-- Part 2 Action: Line chart history -->
+    <record id="action_wellness_row_2_history" model="ir.actions.act_window">
+        <field name="name">History Track: Team Evolution</field>
+        <field name="res_model">wellness.check</field>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="wellness_check_view_graph_line"/>
+    </record>
+
+    <!-- Dashboard Board: 2 rows in 1 column -->
     <record id="wellness_check_view_board" model="ir.ui.view">
         <field name="name">wellness.check.board</field>
         <field name="model">board.board</field>
         <field name="arch" type="xml">
-            <form string="Wellness Dashboard">
+            <form string="Management Dashboard">
                 <board style="1">
                     <column>
-                       <action name="%(wellness_check.action_wellness_check_stats_kpi)d" string="Real-time Pulse Summary" view_mode="kanban"/>
-                    </column>
-                </board>
-                <board style="1-1">
-                    <column>
-                       <action name="%(wellness_check.action_wellness_check_report)d" string="Sentiment Analysis Map" view_mode="graph"/>
-                    </column>
-                    <column>
-                       <action name="%(wellness_check.action_wellness_check_report)d" string="Historical Trend Data" view_mode="pivot"/>
+                        <action name="%(wellness_check.action_wellness_row_1_snapshot)d" string="Today's Snapshot" view_mode="form"/>
+                        <action name="%(wellness_check.action_wellness_row_2_history)d" string="History Track: Team Evolution" view_mode="graph"/>
                     </column>
                 </board>
             </form>
         </field>
     </record>
 
-    <!-- Client Action to launch the Board Dashboard -->
+    <!-- Entry point -->
     <record id="action_wellness_pulse_board" model="ir.actions.act_window">
-        <field name="name">Wellness Management</field>
+        <field name="name">Wellness Dashboard</field>
         <field name="res_model">board.board</field>
         <field name="view_mode">form</field>
         <field name="usage">menu</field>

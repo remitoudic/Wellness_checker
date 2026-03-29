@@ -16,6 +16,7 @@
         'views/wellness_dashboard_board.xml',
         'views/wellness_menus.xml',
     ],
+    'post_init_hook': 'post_init_hook',
     'installable': True,
     'application': True,
     'license': 'LGPL-3',

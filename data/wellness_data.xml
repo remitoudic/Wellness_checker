@@ -15,4 +15,9 @@
         <field name="sequence">30</field>
         <field name="active">True</field>
     </record>
+    
+    <!-- Permanent Dashboard Singletons -->
+    <record id="wellness_dashboard_singleton" model="wellness.dashboard">
+        <!-- Fields are computed automatically, we just need the record to exist -->
+    </record>
 </odoo>

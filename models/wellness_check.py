@@ -31,6 +31,7 @@ class WellnessCheck(models.Model):
     mood_score = fields.Integer(
         string='Mood Score (1-10)', 
         default=5,
+        aggregator="avg",
         help="Self-reported numerical mood score from 1 (lowest) to 10 (highest)."
     )
     
@@ -116,6 +117,18 @@ class WellnessCheck(models.Model):
         # Average mood calculation
         avg_mood_today = sum(today_records.mapped('mood_score')) / participation_today if participation_today > 0 else 0
 
+        # Sign of the day: + if happy > sad, - if sad > happy
+        happy_count = len(today_records.filtered(lambda r: r.sentiment == 'happy'))
+        sad_count = len(today_records.filtered(lambda r: r.sentiment == 'sad'))
+        
+        sign = "stable"
+        if happy_count > sad_count:
+            sign = "+"
+        elif sad_count > happy_count:
+            sign = "-"
+        else:
+            sign = "="
+
         # Trend analysis logic
         last_3_days = self.search([('date', '>', three_days_ago), ('date', '<=', today)])
         prev_3_days = self.search([('date', '>', six_days_ago), ('date', '<=', three_days_ago)])
@@ -133,5 +146,6 @@ class WellnessCheck(models.Model):
             'participation_today': participation_today,
             'avg_mood_today': round(avg_mood_today, 1),
             'trend': trend,
+            'sign': sign,
             'trend_label': f"{'+' if last_avg >= prev_avg else ''}{round(last_avg - prev_avg, 1)} pts"
         }
