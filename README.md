@@ -1,4 +1,4 @@
-# WellnessCheck Odoo Module
+# WellnessChecker
 
 **WellnessCheck** is a specialized Odoo module designed to help Human Resources departments track and improve employee morale through non-intrusive, anonymous daily check-ins. 
 
