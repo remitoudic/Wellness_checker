@@ -49,6 +49,3 @@ In a modern workplace, understanding the emotional state of a workforce is key t
 - `static/src/js/`: Handles the client-side trigger logic for the login survey.
 - `views/`: Dashboard, form, and tree views for HR oversight.
 
----
-
-*Developed by Antigravity*
