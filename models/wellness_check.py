@@ -57,3 +57,37 @@ class WellnessCheck(models.Model):
                 summary = "Employee has a neutral sentiment."
             
             record.analysis = summary
+
+    @api.model
+    def get_wellness_stats(self):
+        """ Computes the statistics for the dashboard boxes """
+        today = fields.Date.today()
+        three_days_ago = today - datetime.timedelta(days=3)
+        six_days_ago = today - datetime.timedelta(days=6)
+
+        # 1. Participation Today
+        today_records = self.search([('date', '=', today)])
+        participation_today = len(today_records)
+
+        # 2. Avg Mood Score Today
+        avg_mood_today = sum(today_records.mapped('mood_score')) / participation_today if participation_today > 0 else 0
+
+        # 3. 3-Day Trend (Comparing avg of last 3 days vs previous 3 days)
+        last_3_days = self.search([('date', '>', three_days_ago), ('date', '<=', today)])
+        prev_3_days = self.search([('date', '>', six_days_ago), ('date', '<=', three_days_ago)])
+
+        last_avg = sum(last_3_days.mapped('mood_score')) / len(last_3_days) if last_3_days else 0
+        prev_avg = sum(prev_3_days.mapped('mood_score')) / len(prev_3_days) if prev_3_days else 0
+
+        trend = "stable"
+        if last_avg > prev_avg + 0.5:
+            trend = "up"
+        elif last_avg < prev_avg - 0.5:
+            trend = "down"
+
+        return {
+            'participation_today': participation_today,
+            'avg_mood_today': round(avg_mood_today, 1),
+            'trend': trend,
+            'trend_label': f"{'+' if last_avg >= prev_avg else ''}{round(last_avg - prev_avg, 1)} pts"
+        }

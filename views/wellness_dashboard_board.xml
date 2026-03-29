@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Special Kanban View for the 3 KPI Boxes -->
+    <record id="view_wellness_check_kanban_stats" model="ir.ui.view">
+        <field name="name">wellness.check.kanban.stats</field>
+        <field name="model">wellness.check</field>
+        <field name="arch" type="xml">
+            <kanban create="0" records_draggable="0" sample="1">
+                <field name="id"/>
+                <field name="mood_score"/>
+                <field name="sentiment"/>
+                <field name="date"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="o_kanban_record_full shadow-sm rounded-4 border p-4 text-center bg-white m-2">
+                            <div class="h5 text-muted text-uppercase fw-bold mb-2">Employee Pulse</div>
+                            <div class="display-3 fw-bold text-teal" style="color: #008080;"><field name="mood_score"/></div>
+                            <div class="badge rounded-pill mt-2" decoration-success="sentiment == 'happy'" decoration-warning="sentiment == 'neutral'" decoration-danger="sentiment == 'sad'">
+                                <field name="sentiment"/>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Action for the KPI boxes -->
+    <record id="action_wellness_check_stats_kpi" model="ir.actions.act_window">
+        <field name="name">Wellness KPIs</field>
+        <field name="res_model">wellness.check</field>
+        <field name="view_mode">kanban</field>
+        <field name="view_id" ref="view_wellness_check_kanban_stats"/>
+        <field name="limit">1</field>
+    </record>
+
+    <!-- The Official Dashboard (Board) Definition -->
+    <record id="wellness_check_view_board" model="ir.ui.view">
+        <field name="name">wellness.check.board</field>
+        <field name="model">board.board</field>
+        <field name="arch" type="xml">
+            <form string="Wellness Dashboard">
+                <board style="1">
+                    <column>
+                       <action name="%(wellness_check.action_wellness_check_stats_kpi)d" string="Real-time Pulse Summary" view_mode="kanban"/>
+                    </column>
+                </board>
+                <board style="1-1">
+                    <column>
+                       <action name="%(wellness_check.action_wellness_check_report)d" string="Sentiment Analysis Map" view_mode="graph"/>
+                    </column>
+                    <column>
+                       <action name="%(wellness_check.action_wellness_check_report)d" string="Historical Trend Data" view_mode="pivot"/>
+                    </column>
+                </board>
+            </form>
+        </field>
+    </record>
+
+    <!-- Client Action to launch the Board Dashboard -->
+    <record id="action_wellness_pulse_board" model="ir.actions.act_window">
+        <field name="name">Wellness Management</field>
+        <field name="res_model">board.board</field>
+        <field name="view_mode">form</field>
+        <field name="usage">menu</field>
+        <field name="view_id" ref="wellness_check_view_board"/>
+    </record>
+</odoo>
