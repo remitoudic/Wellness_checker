@@ -27,6 +27,12 @@ In a modern workplace, understanding the emotional state of a workforce is key t
 - **Trend Identification**: Spot morale dips or peaks immediately.
 - **Anonymity by Design**: Focuses on collective data trends rather than individual monitoring, encouraging honest feedback.
 
+<p align="center">
+  <img src="static/description/screenshot_dashboard.png" alt="WellnessCheck Dashboard" width="800"/>
+  <br/>
+  <em>Dashboard Preview — Today's Snapshot & Historical Team Evolution</em>
+</p>
+
 ---
 
 ## 🚀 Installation
