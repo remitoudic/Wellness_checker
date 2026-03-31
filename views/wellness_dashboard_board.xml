@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-    <!-- 1. Form View for the Dashboard Singleton (priority=1 = default view) -->
+    <!-- 1. Form View for the Unified Management Dashboard (OCA Standard) -->
     <record id="view_wellness_dashboard_form_snapshot" model="ir.ui.view">
         <field name="name">wellness.dashboard.form.snapshot</field>
         <field name="model">wellness.dashboard</field>
@@ -8,10 +8,11 @@
         <field name="arch" type="xml">
             <form create="0" edit="0" delete="0">
                 <sheet>
-                    <div style="display:flex; flex-wrap:nowrap; gap:16px; width:100%; align-items:stretch; padding: 8px 0;">
+                    <!-- KPI Cards Section -->
+                    <div style="display:flex; flex-wrap:wrap; gap:16px; width:100%; align-items:stretch; padding: 8px 0; margin-bottom: 24px;">
 
                         <!-- Card 1: Engagement -->
-                        <div style="flex:1; min-width:0;">
+                        <div style="flex:1; min-width:180px;">
                             <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
                                 <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:8px;">Engagement</div>
                                 <div style="font-size:2.8rem; font-weight:800; color:#008080; line-height:1;">
@@ -22,7 +23,7 @@
                         </div>
 
                         <!-- Card 2: Pulse Sign -->
-                        <div style="flex:0.7; min-width:0;">
+                        <div style="flex:0.7; min-width:120px;">
                             <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
                                 <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:8px;">Pulse</div>
                                 <div style="font-size:3rem; font-weight:800; line-height:1;">
@@ -37,7 +38,7 @@
                         </div>
 
                         <!-- Card 3: Average Mood -->
-                        <div style="flex:1; min-width:0;">
+                        <div style="flex:1; min-width:180px;">
                             <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; text-align:center; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
                                 <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:8px;">Avg Mood</div>
                                 <div style="font-size:2.8rem; font-weight:800; color:#008080; line-height:1;">
@@ -47,11 +48,10 @@
                             </div>
                         </div>
 
-                        <!-- Card 4: Sentiment Split (using a simple stat display) -->
-                        <div style="flex:2; min-width:0;">
+                        <!-- Card 4: Sentiment Split -->
+                        <div style="flex:2; min-width:300px;">
                             <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px; display:flex; flex-direction:column; justify-content:center; min-height:140px;">
                                 <div style="font-size:0.65rem; text-transform:uppercase; letter-spacing:0.08em; color:#9ca3af; font-weight:700; margin-bottom:14px;">Sentiment Split</div>
-                                <!-- Three stat boxes side by side -->
                                 <div style="display:flex; gap:12px; text-align:center;">
                                     <div style="flex:1; background:#f0fdf4; border-radius:10px; padding:12px 8px; border:1px solid #bbf7d0;">
                                         <div style="font-size:1.6rem; font-weight:800; color:#16a34a; line-height:1;"><field name="happy_percent" readonly="1"/>%</div>
@@ -68,52 +68,27 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
+                    <!-- History Graph Section (Replacing board.board action) -->
+                    <div style="background:#fff; border-radius:16px; border:1px solid #e5e7eb; box-shadow:0 1px 4px rgba(0,0,0,0.07); padding:24px;">
+                        <h3 style="font-size:1.1rem; color:#374151; font-weight:700; margin-bottom:16px;">History Track: Team Evolution</h3>
+                        <field name="history_ids" widget="graph" groups="hr.group_hr_user"/>
                     </div>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- Part 1 Action: Form view on the singleton record -->
-    <record id="action_wellness_row_1_snapshot" model="ir.actions.act_window">
-        <field name="name">Pulse &amp; Sentiment Snapshot</field>
+    <!-- Unified Dashboard Entry Action -->
+    <record id="action_wellness_pulse_dashboard" model="ir.actions.act_window">
+        <field name="name">Wellness Dashboard</field>
         <field name="res_model">wellness.dashboard</field>
         <field name="view_mode">form</field>
         <field name="view_id" ref="view_wellness_dashboard_form_snapshot"/>
         <field name="res_id" ref="wellness_check.wellness_dashboard_singleton"/>
-    </record>
-
-    <!-- Part 2 Action: Line chart history -->
-    <record id="action_wellness_row_2_history" model="ir.actions.act_window">
-        <field name="name">History Track: Team Evolution</field>
-        <field name="res_model">wellness.check</field>
-        <field name="view_mode">graph</field>
-        <field name="view_id" ref="wellness_check_view_graph_line"/>
-    </record>
-
-    <!-- Dashboard Board: 2 rows in 1 column -->
-    <record id="wellness_check_view_board" model="ir.ui.view">
-        <field name="name">wellness.check.board</field>
-        <field name="model">board.board</field>
-        <field name="arch" type="xml">
-            <form string="Management Dashboard">
-                <board style="1">
-                    <column>
-                        <action name="%(wellness_check.action_wellness_row_1_snapshot)d" string="Today's Snapshot" view_mode="form"/>
-                        <action name="%(wellness_check.action_wellness_row_2_history)d" string="History Track: Team Evolution" view_mode="graph"/>
-                    </column>
-                </board>
-            </form>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Real-time pulse stats will appear here!</p>
         </field>
-    </record>
-
-    <!-- Entry point -->
-    <record id="action_wellness_pulse_board" model="ir.actions.act_window">
-        <field name="name">Wellness Dashboard</field>
-        <field name="res_model">board.board</field>
-        <field name="view_mode">form</field>
-        <field name="usage">menu</field>
-        <field name="view_id" ref="wellness_check_view_board"/>
     </record>
 </odoo>

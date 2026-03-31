@@ -4,8 +4,11 @@
     'summary': 'Empowering HR with Daily Wellness Insights',
     'description': 'A module for HR to track employee wellness through anonymous daily check-ins.',
     'category': 'Human Resources',
-    'author': 'Antigravity',
-    'depends': ['base', 'web', 'hr', 'board'],
+    'author': 'Odoo Community Association (OCA), Remi Toudic',
+    'website': 'https://github.com/OCA/hr',
+    'maintainers': ['remi-toudic'],
+    'development_status': 'Beta',
+    'depends': ['base', 'web', 'hr'],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',

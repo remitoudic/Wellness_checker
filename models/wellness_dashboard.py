@@ -19,6 +19,19 @@ class WellnessDashboard(models.Model):
     neutral_percent = fields.Integer(string='Neutral %')
     sad_percent = fields.Integer(string='Sad %')
 
+    # Relationship for embedding the graph in the form view (OCA compliant dashboard)
+    history_ids = fields.One2many(
+        'wellness.check', 
+        compute='_compute_history_ids', 
+        string='Check History'
+    )
+
+    def _compute_history_ids(self):
+        """ Fetch all records to display in the integrated chart. """
+        checks = self.env['wellness.check'].search([], order='date asc')
+        for record in self:
+            record.history_ids = checks
+
     # ------------------------------------------------------------------
     # Always refresh before READING an existing record
     # ------------------------------------------------------------------
