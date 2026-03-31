@@ -1,6 +1,6 @@
 {
     'name': 'WellnessCheck',
-    'version': '1.0',
+    'version': '18.0.1.0.0',
     'summary': 'Empowering HR with Daily Wellness Insights',
     'description': 'A module for HR to track employee wellness through anonymous daily check-ins.',
     'category': 'Human Resources',

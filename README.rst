@@ -40,7 +40,7 @@ Changelog
 Contributors
 ============
 
-*   Remi Toudic <remi.toudic@example.com>
+*   Remi Toudic <remitoudic@gmail.com>
 
 Maintainers
 -----------

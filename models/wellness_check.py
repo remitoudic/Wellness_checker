@@ -1,5 +1,6 @@
-from odoo import models, fields, api
 import datetime
+
+from odoo import api, fields, models
 
 class WellnessCheck(models.Model):
     """ 
