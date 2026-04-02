@@ -54,8 +54,8 @@ In a modern workplace, understanding the emotional state of a workforce is key t
 
 ## 📁 Project Structure
 
-- `models/`: Defines the data structure for wellness records and question templates.
-- `wizard/`: Contains the logic and view for the daily popup survey.
-- `static/src/js/`: Handles the client-side trigger logic for the login survey.
-- `views/`: Dashboard, form, and tree views for HR oversight.
+- `models/` : Defines the data structure for wellness records and question templates.
+- `wizard/` : Contains the logic and view for the daily popup survey.
+- `static/src/js/` : Handles the client-side trigger logic for the login survey.
+- `views/` : Dashboard, form, and tree views for HR oversight.
 
