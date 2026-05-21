@@ -24,7 +24,7 @@ In a modern workplace, understanding the emotional state of a workforce is key t
 
 ### 3. HR Wellness Dashboard
 - **Visual Analytics**: Interactive charts (pie charts, line graphs) to visualize organizational happiness over time.
-- **Trend Identification**: Spot morale dips or peaks immediately.
+- **Trend Identification**: Spot morale dips or peaks immediately!
 - **Anonymity by Design**: Focuses on collective data trends rather than individual monitoring, encouraging honest feedback.
 
 <p align="center">
